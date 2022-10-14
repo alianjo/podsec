@@ -1,0 +1,60 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: podsec
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: podsec
+  namespace: podsec
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: podsec
+  labels:
+    rbac.example.com/aggregate-to-monitoring: "true"
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch", "patch", "update"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: podsec
+  namespace: podsec
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: podsec
+      app.kubernetes.io/instance: podsec
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: podsec
+        app.kubernetes.io/instance: podsec
+    spec:
+      serviceAccountName: podsec
+      containers:
+        - name: podsec
+          image: aliaj88/podsec:1
+          imagePullPolicy: "IfNotPresent"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: read-secrets
+subjects:
+- kind: ServiceAccount
+  name: podsec
+  namespace: podsec
+roleRef:
+  kind: ClusterRole
+  name: podsec
+  apiGroup: rbac.authorization.k8s.io
+---

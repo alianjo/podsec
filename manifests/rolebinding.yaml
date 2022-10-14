@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "dave" to read secrets in the "development" namespace.
+# You need to already have a ClusterRole named "secret-reader".
+kind: ClusterRoleBinding
+metadata:
+  name: read-secrets
+subjects:
+- kind: ServiceAccount
+  name: podsec
+  namespace: podsec
+roleRef:
+  kind: ClusterRole
+  name: podsec
+  apiGroup: rbac.authorization.k8s.io

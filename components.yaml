@@ -17,8 +17,8 @@ metadata:
     rbac.example.com/aggregate-to-monitoring: "true"
 rules:
 - apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch", "patch", "update"]
+  resources: ["pods", "events"]
+  verbs: ["get", "list", "watch", "patch", "update", "create"]
 ---
 apiVersion: apps/v1
 kind: Deployment

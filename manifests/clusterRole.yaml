@@ -8,5 +8,5 @@ metadata:
 # the rules below will be added to the "monitoring" ClusterRole.
 rules:
 - apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch", "patch", "update"]
+  resources: ["pods", "events"]
+  verbs: ["get", "list", "watch", "patch", "update", "create"]
